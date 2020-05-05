@@ -3,9 +3,7 @@ import { Summary } from './Summary'
 import { useMousePositionRef } from '../hooks/useMousePositionRef'
 import { setBgColor } from '../lib/setBgColor'
 import { fadeIn } from '../lib/fadeIn'
-
-const WIDTH = 140
-const HEIGHT = 100
+import { filterBlur } from '../lib/filterBlur'
 
 const MAX_INITIAL_SPEED = 80
 
@@ -21,7 +19,7 @@ function firstClick() {
 
 function secondClick() {
   const btn = document.querySelector('.click-me')
-  if (btn) btn.style.filter = 'blur(5px)'
+  if (btn) filterBlur(btn)
   setBgColor(document.body, '#263238')
 }
 
@@ -34,21 +32,37 @@ export function App() {
   const [elapsedTime, setElapsedTime] = useState(null)
 
   const btnRef = useRef(null)
+  const btnDim = useRef({ width: 0, height: 0 }).current
   const btnPos = useRef({ x: 0, y: 0 }).current
   const btnSpeed = useRef({ x: 0, y: 0 }).current
   const btnAngle = useRef({ a: 0 }).current
 
   // INIT
   useEffect(() => {
-    btnPos.x = window.innerWidth / 2
-    btnPos.y = window.innerHeight / 2
-    btnRef.current.style.transform = `translate(
-      ${btnPos.x - WIDTH / 2}px,
-      ${btnPos.y - HEIGHT / 2}px
-    )`
-
     fadeIn(btnRef.current)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  function setup() {
+    const btn = btnRef.current
+    if (!btn) return
+
+    const bbox = btn.getBoundingClientRect()
+    btnDim.width = bbox.width
+    btnDim.height = bbox.height
+
+    btnPos.x = bbox.left + bbox.width / 2
+    btnPos.y = bbox.top + bbox.height / 2
+
+    btn.style.position = 'fixed'
+    btn.style.top = 0
+    btn.style.left = 0
+
+    btn.style.transform = `translate(
+      ${btnPos.x - btnDim.width / 2}px,
+      ${btnPos.y - btnDim.height / 2}px
+    )`
+    console.log(bbox)
+  }
 
   // LOOP
   function animate() {
@@ -78,10 +92,10 @@ export function App() {
     if (Math.abs(btnSpeed.x) < 0.01) btnSpeed.x = 0
     if (Math.abs(btnSpeed.y) < 0.01) btnSpeed.y = 0
 
-    if (btnPos.x <= WIDTH / 2) btnSpeed.x *= -BOUNCE_FORCE
-    if (btnPos.x >= window.innerWidth - WIDTH / 2 - 1) btnSpeed.x *= -BOUNCE_FORCE
-    if (btnPos.y <= HEIGHT / 2) btnSpeed.y *= -BOUNCE_FORCE
-    if (btnPos.y >= window.innerHeight - HEIGHT / 2 - 1) btnSpeed.y *= -BOUNCE_FORCE
+    if (btnPos.x <= btnDim.width / 2) btnSpeed.x *= -BOUNCE_FORCE
+    if (btnPos.x >= window.innerWidth - btnDim.width / 2 - 1) btnSpeed.x *= -BOUNCE_FORCE
+    if (btnPos.y <= btnDim.height / 2) btnSpeed.y *= -BOUNCE_FORCE
+    if (btnPos.y >= window.innerHeight - btnDim.height / 2 - 1) btnSpeed.y *= -BOUNCE_FORCE
 
     btnSpeed.x = Math.min(MAX_INITIAL_SPEED, btnSpeed.x)
     btnSpeed.y = Math.min(MAX_INITIAL_SPEED, btnSpeed.y)
@@ -91,8 +105,8 @@ export function App() {
 
     if (btnRef.current) {
       btnRef.current.style.transform = `translate3d(
-      ${btnPos.x - WIDTH / 2}px, 
-      ${btnPos.y - HEIGHT / 2}px,
+      ${btnPos.x - btnDim.width / 2}px, 
+      ${btnPos.y - btnDim.height / 2}px,
       0px
     ) rotate(${btnAngle.a - Math.PI / 2}rad)`
     }
@@ -100,20 +114,17 @@ export function App() {
   }
 
   return (
-    <div ref={mouseListenerRef} className="wrapper">
+    <div ref={mouseListenerRef} className="wrapper flex justify-center items-center">
       <button
         ref={btnRef}
         className="click-me"
-        style={{
-          width: WIDTH,
-          height: HEIGHT,
-        }}
         onClick={() => {
           if (clicked.current) return
           if (!playAnimation.current) {
             playAnimation.current = true
             btnSpeed.x = (Math.random() * 2 - 1) * MAX_INITIAL_SPEED
             btnSpeed.y = (Math.random() * 2 - 1) * MAX_INITIAL_SPEED
+            setup()
             raf(animate)
             firstClick()
             startTime.current = Date.now()
