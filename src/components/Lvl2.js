@@ -66,7 +66,7 @@ export function Lvl2({
           <BetchaCantClickMe
             ref={betchaRef}
             className="pa2 br2  f5 shadow-6 user-select-none bg-white"
-            onClick={handleBtnClick}
+            onMouseDown={handleBtnClick}
             mousePosRef={mousePosRef}
             wrapperRef={wrapperRef}
             physics={{

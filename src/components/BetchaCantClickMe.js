@@ -13,7 +13,17 @@ const raf = requestAnimationFrame
 
 export const BetchaCantClickMe = forwardRef(
   (
-    { id, children, style, className, mousePosRef, onClick, wrapperRef, physics: _physics = {} },
+    {
+      id,
+      children,
+      style,
+      className,
+      mousePosRef,
+      onClick,
+      onMouseDown,
+      wrapperRef,
+      physics: _physics = {},
+    },
     forwardedRef
   ) => {
     const ref = useRef(null)
@@ -136,7 +146,14 @@ export const BetchaCantClickMe = forwardRef(
     }))
 
     return (
-      <button id={id} className={className} style={style} ref={ref} onClick={onClick}>
+      <button
+        id={id}
+        className={className}
+        style={style}
+        ref={ref}
+        onClick={onClick}
+        onMouseDown={onMouseDown}
+      >
         {children}
       </button>
     )

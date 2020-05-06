@@ -64,7 +64,7 @@ export function Lvl1({
             repulsiveRange: 500,
             bounceForce: 3,
           }}
-          onClick={handleBtnClick}
+          onMouseDown={handleBtnClick}
           mousePosRef={mousePosRef}
           wrapperRef={wrapperRef}
         >
