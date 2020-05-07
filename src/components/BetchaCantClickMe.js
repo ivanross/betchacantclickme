@@ -1,5 +1,13 @@
 import React, { useRef, useImperativeHandle, forwardRef, useEffect } from 'react'
 
+const PI = Math.PI
+const TAU = Math.PI * 2
+
+const normalizeDeltaAngle = (delta) => {
+  const sPI = Math.sign(delta) * PI
+  return ((delta + sPI) % TAU) - sPI
+}
+
 const DEFAULT_PHYSICS = {
   friction: 0.1,
   maxSpeed: 100,
@@ -99,7 +107,7 @@ export const BetchaCantClickMe = forwardRef(
 
       if (speed.x !== 0 && speed.y !== 0) {
         const newAngle = Math.atan2(speed.x, -speed.y)
-        angle.a += (newAngle - angle.a) * 0.05
+        angle.a += normalizeDeltaAngle(newAngle - angle.a) * 0.05
       }
 
       speed.x /= physics.friction + 1
@@ -124,7 +132,7 @@ export const BetchaCantClickMe = forwardRef(
       ${pos.x - size.width / 2}px, 
       ${pos.y - size.height / 2}px,
       0px
-    ) rotate(${angle.a - Math.PI / 2}rad)`
+    ) rotate(${angle.a}rad)`
       }
       if (playAnimation.current) raf(animate)
     }
