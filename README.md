@@ -1,10 +1,11 @@
-# Betcha Cant Click Me
+<p align="center">
+<img align="middle" width="90%" alt="betchacantclickme" src="docs/title.svg">
+</p>
 
-This project was bootstrapped with [Accurapp](https://github.com/accurat/accurapp).
+<br/>
 
-## Usage
-Once you installed the dependencies running `yarn`, these are the available commands:
-- `yarn start` starts a server locally
-- `yarn build` builds the project for production, ready to be deployed from the `build/` folder
+<p align="center">
+👉<a href="https://betchacantclickme.now.sh">betchacantclicme.now.sh</a> 👈
+</p>
 
-[Read the rest of the documentation here.](https://github.com/accurat/accurapp)
+Can you?
