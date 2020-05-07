@@ -43,3 +43,23 @@ a:hover {
 .new-font {
   font-family: 'Permanent Marker', cursive;
 }
+
+.nonono {
+  position: absolute;
+  transform: rotate(-10deg);
+  animation: nonono 200ms ease-in-out alternate infinite;
+
+  font-size: 70vmin;
+  &::before {
+    content: '👆';
+  }
+}
+
+@keyframes nonono {
+  from {
+    transform: translate(-100px, 0) rotate(-10deg);
+  }
+  to {
+    transform: translate(100px, 0) rotate(10deg);
+  }
+}

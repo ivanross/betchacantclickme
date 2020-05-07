@@ -6,6 +6,7 @@ import '@accurat/tachyons-lite'
 import 'tachyons-extra'
 import './reset.css'
 import './style.css'
+import 'devtools-detect'
 
 function renderApp() {
   ReactDOM.render(<App />, document.getElementById('root'))

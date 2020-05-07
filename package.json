@@ -32,6 +32,7 @@
   "dependencies": {
     "@accurat/tachyons-lite": "^1.0.4",
     "d3": "^5.16.0",
+    "devtools-detect": "^3.0.0",
     "lodash-es": "^4.17.15",
     "modern-normalize": "^0.6.0",
     "react": "^16.13.1",

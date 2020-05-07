@@ -1,4 +1,5 @@
 import React, { useRef, useImperativeHandle, forwardRef, useEffect } from 'react'
+import { NONONO } from '../lib/contants'
 
 const PI = Math.PI
 const TAU = Math.PI * 2
@@ -113,6 +114,18 @@ export const BetchaCantClickMe = forwardRef(
       const mousePos = mousePosRef.current
       const physics = physicsRef.current
 
+      if (NONONO.crazy) {
+        if (ref.current) {
+          ref.current.style.transform = `translate3d(
+          ${Math.random() * window.innerWidth}px, 
+          ${Math.random() * window.innerHeight}px,
+          0px
+        ) rotate(${Math.random() * TAU}rad)`
+        }
+        raf(animate)
+        return
+      }
+
       const distVec = { x: mousePos.x - pos.x, y: mousePos.y - pos.y }
       const dist = Math.hypot(distVec.x, distVec.y)
 
@@ -193,7 +206,11 @@ export const BetchaCantClickMe = forwardRef(
         style={style}
         ref={ref}
         onClick={onClick}
-        onMouseDown={onMouseDown}
+        onMouseDown={() => {
+          NONONO.crazy
+            ? console.log("%cC'MON YOU CAN DO BETTER 😏", 'color:red;font-size:30px')
+            : onMouseDown && onMouseDown()
+        }}
       >
         {children}
       </button>
