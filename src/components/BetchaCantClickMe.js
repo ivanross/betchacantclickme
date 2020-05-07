@@ -140,10 +140,19 @@ export const BetchaCantClickMe = forwardRef(
 
       const rotatedBox = getRotatedBoundingRect(size.width, size.height, angle.a)
 
-      if (pos.x <= rotatedBox.width / 2 + 1) speed.x *= -physics.bounceForce
-      if (pos.x >= window.innerWidth - rotatedBox.width / 2 - 1) speed.x *= -physics.bounceForce
-      if (pos.y <= rotatedBox.height / 2 + 1) speed.y *= -physics.bounceForce
-      if (pos.y >= window.innerHeight - rotatedBox.height / 2 - 1) speed.y *= -physics.bounceForce
+      if (pos.x <= 1 + rotatedBox.width / 2) {
+        speed.x *= -physics.bounceForce
+        pos.x = 1 + rotatedBox.width / 2
+      } else if (pos.x >= window.innerWidth - 1 - rotatedBox.width / 2) {
+        speed.x *= -physics.bounceForce
+        pos.x = window.innerWidth - 1 - rotatedBox.width / 2
+      } else if (pos.y <= 1 + rotatedBox.height / 2) {
+        speed.y *= -physics.bounceForce
+        pos.y = 1 + rotatedBox.height / 2
+      } else if (pos.y >= window.innerHeight - 1 - rotatedBox.height / 2) {
+        speed.y *= -physics.bounceForce
+        pos.y = window.innerHeight - 1 - rotatedBox.height / 2
+      }
 
       speed.x = Math.max(-physics.maxSpeed, Math.min(physics.maxSpeed, speed.x))
       speed.y = Math.max(-physics.maxSpeed, Math.min(physics.maxSpeed, speed.y))
