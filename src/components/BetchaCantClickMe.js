@@ -71,8 +71,9 @@ export const BetchaCantClickMe = forwardRef(
       pos.x = bbox.left + bbox.width / 2
       pos.y = bbox.top + bbox.height / 2
 
-      speed.x = (Math.random() * 2 - 1) * physicsRef.current.initialSpeed
-      speed.y = (Math.random() * 2 - 1) * physicsRef.current.initialSpeed
+      const randomAngle = Math.random() * TAU
+      speed.x = Math.cos(randomAngle) * physicsRef.current.initialSpeed
+      speed.y = Math.sin(randomAngle) * physicsRef.current.initialSpeed
 
       // Change postion to fixed
       if (wrapperRef?.current) wrapperRef.current.appendChild(btn)
