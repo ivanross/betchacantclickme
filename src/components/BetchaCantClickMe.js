@@ -8,6 +8,26 @@ const normalizeDeltaAngle = (delta) => {
   return ((delta + sPI) % TAU) - sPI
 }
 
+const rotate = (x, y, theta) => [
+  x * Math.cos(theta) + y * Math.sin(theta),
+  y * Math.cos(theta) - x * Math.sin(theta),
+]
+const getRotatedBoundingRect = (width, height, theta) => {
+  const corners = [
+    [-width / 2, -height / 2],
+    [width / 2, -height / 2],
+    [width / 2, height / 2],
+    [-width / 2, height / 2],
+  ]
+
+  const rotatedCorners = corners.map(([x, y]) => rotate(x, y, theta))
+
+  return {
+    width: Math.abs(2 * Math.max(...rotatedCorners.map((pos) => pos[0]))),
+    height: Math.abs(2 * Math.max(...rotatedCorners.map((pos) => pos[1]))),
+  }
+}
+
 const DEFAULT_PHYSICS = {
   friction: 0.1,
   maxSpeed: 100,
@@ -82,9 +102,10 @@ export const BetchaCantClickMe = forwardRef(
       btn.style.top = 0
       btn.style.left = 0
 
-      btn.style.transform = `translate(
+      btn.style.transform = `translate3d(
         ${pos.x - size.width / 2}px,
-        ${pos.y - size.height / 2}px
+        ${pos.y - size.height / 2}px,
+        0
       )`
     }
 
@@ -117,10 +138,12 @@ export const BetchaCantClickMe = forwardRef(
       if (Math.abs(speed.x) < 0.01) speed.x = 0
       if (Math.abs(speed.y) < 0.01) speed.y = 0
 
-      if (pos.x <= size.width / 2) speed.x *= -physics.bounceForce
-      if (pos.x >= window.innerWidth - size.width / 2 - 1) speed.x *= -physics.bounceForce
-      if (pos.y <= size.height / 2) speed.y *= -physics.bounceForce
-      if (pos.y >= window.innerHeight - size.height / 2 - 1) speed.y *= -physics.bounceForce
+      const rotatedBox = getRotatedBoundingRect(size.width, size.height, angle.a)
+
+      if (pos.x <= rotatedBox.width / 2 + 1) speed.x *= -physics.bounceForce
+      if (pos.x >= window.innerWidth - rotatedBox.width / 2 - 1) speed.x *= -physics.bounceForce
+      if (pos.y <= rotatedBox.height / 2 + 1) speed.y *= -physics.bounceForce
+      if (pos.y >= window.innerHeight - rotatedBox.height / 2 - 1) speed.y *= -physics.bounceForce
 
       speed.x = Math.max(-physics.maxSpeed, Math.min(physics.maxSpeed, speed.x))
       speed.y = Math.max(-physics.maxSpeed, Math.min(physics.maxSpeed, speed.y))
@@ -130,10 +153,10 @@ export const BetchaCantClickMe = forwardRef(
 
       if (ref.current) {
         ref.current.style.transform = `translate3d(
-      ${pos.x - size.width / 2}px, 
-      ${pos.y - size.height / 2}px,
-      0px
-    ) rotate(${angle.a}rad)`
+          ${pos.x - size.width / 2}px, 
+          ${pos.y - size.height / 2}px,
+          0px
+        ) rotate(${angle.a}rad)`
       }
       if (playAnimation.current) raf(animate)
     }
