@@ -9,14 +9,16 @@ import { useIncrement } from '../hooks/useIncrement'
 import { useDevTool } from '../hooks/useDevTool'
 import { IS_DEBUG } from '../lib/contants'
 
+const levels = [Lvl1, Lvl2, Summary]
+
 export function App() {
   const [mouseListenerRef, mousePosRef] = useMousePositionRef()
   const [nickname, setNickname] = useState('')
-  const [lvl, nextLvl] = useIncrement(1)
+  const [lvl, nextLvl] = useIncrement(0)
   const isDevToolOpen = useDevTool()
   const chronometer = useChronometer()
 
-  const CurrentLvl = lvl === 1 ? Lvl1 : lvl === 2 ? Lvl2 : Summary
+  const CurrentLvl = levels[lvl]
 
   return (
     <>

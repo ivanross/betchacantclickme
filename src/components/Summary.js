@@ -2,13 +2,23 @@ import React, { useRef, useEffect } from 'react'
 import { setBgColor } from '../lib/transition'
 import { BetchaCantClickMe } from './BetchaCantClickMe'
 import { Footer } from './Footer'
+
+const INITIAL_PHYSICS = {
+  friction: 0,
+  maxSpeed: 100,
+  initialSpeed: 1000,
+  repulsiveForce: 0,
+  repulsiveRange: 0,
+  bounceForce: 1,
+}
+
 export function Summary({ chronometer, mousePosRef }) {
-  const betchaLRef = useRef(null)
-  const betchaRRef = useRef(null)
+  const left = useRef(null)
+  const right = useRef(null)
 
   const infiniteRun = () => {
-    const l = betchaLRef.current
-    const r = betchaRRef.current
+    const l = left.current
+    const r = right.current
 
     if (!l || !r) return
     l.start()
@@ -22,35 +32,21 @@ export function Summary({ chronometer, mousePosRef }) {
       <div className="w-100 h-100 flex flex-column justify-center items-center black pa3">
         <div className="f1 ma2">
           <BetchaCantClickMe
-            ref={betchaLRef}
+            ref={left}
             className="black bg-transparent"
             onClick={infiniteRun}
             mousePosRef={mousePosRef}
-            physics={{
-              friction: 0,
-              maxSpeed: 70,
-              initialSpeed: 1000,
-              repulsiveForce: 0,
-              repulsiveRange: 0,
-              bounceForce: 10,
-            }}
+            physics={INITIAL_PHYSICS}
           >
             🤯
           </BetchaCantClickMe>{' '}
           AMAZING{' '}
           <BetchaCantClickMe
-            ref={betchaRRef}
+            ref={right}
             className="black bg-transparent"
             onClick={infiniteRun}
             mousePosRef={mousePosRef}
-            physics={{
-              friction: 0,
-              maxSpeed: 70,
-              initialSpeed: 1000,
-              repulsiveForce: 0,
-              repulsiveRange: 0,
-              bounceForce: 10,
-            }}
+            physics={INITIAL_PHYSICS}
           >
             🤯
           </BetchaCantClickMe>

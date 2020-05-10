@@ -179,8 +179,12 @@ export const BetchaCantClickMe = forwardRef(
       }
 
       // clamp speed if too fast
-      speed.x = Math.max(-physics.maxSpeed, Math.min(physics.maxSpeed, speed.x))
-      speed.y = Math.max(-physics.maxSpeed, Math.min(physics.maxSpeed, speed.y))
+      const speedMagnitude = Math.hypot(speed.x, speed.y)
+      const speedAngle = Math.atan2(speed.y, speed.x)
+      if (speedMagnitude > physics.maxSpeed) {
+        speed.x = Math.cos(speedAngle) * physics.maxSpeed
+        speed.y = Math.sin(speedAngle) * physics.maxSpeed
+      }
 
       // SPEED
       pos.x += speed.x
