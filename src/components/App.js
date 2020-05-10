@@ -7,6 +7,7 @@ import { useMousePositionRef } from '../hooks/useMousePositionRef'
 import { useChronometer } from '../hooks/useChronometer'
 import { useIncrement } from '../hooks/useIncrement'
 import { useDevTool } from '../hooks/useDevTool'
+import { IS_DEBUG } from '../lib/contants'
 
 export function App() {
   const [mouseListenerRef, mousePosRef] = useMousePositionRef()
@@ -29,7 +30,7 @@ export function App() {
           wrapperRef={mouseListenerRef}
         />
       </div>
-      {isDevToolOpen && <Nonono />}
+      {!IS_DEBUG && isDevToolOpen && <Nonono />}
     </>
   )
 }

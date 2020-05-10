@@ -5,8 +5,7 @@ const PI = Math.PI
 const TAU = Math.PI * 2
 
 const normalizeDeltaAngle = (delta) => {
-  const sPI = Math.sign(delta) * PI
-  return ((delta + sPI) % TAU) - sPI
+  return delta >= 0 ? ((delta + PI) % TAU) - PI : ((delta - PI) % -TAU) + PI
 }
 
 const rotate = (x, y, theta) => [
@@ -129,6 +128,7 @@ export const BetchaCantClickMe = forwardRef(
       const distVec = { x: mousePos.x - pos.x, y: mousePos.y - pos.y }
       const dist = Math.hypot(distVec.x, distVec.y)
 
+      // REPULSIVE FORCE
       if (dist < physics.repulsiveRange) {
         const repulsionMagn = physics.repulsiveForce * (1 - physics.repulsiveRange / dist)
 
@@ -140,36 +140,48 @@ export const BetchaCantClickMe = forwardRef(
         speed.y += repulsionVec.y
       }
 
+      // ROTATE
       if (speed.x !== 0 && speed.y !== 0) {
         const newAngle = Math.atan2(speed.x, -speed.y)
         angle.a += normalizeDeltaAngle(newAngle - angle.a) * 0.05
       }
 
+      // FRICITON
       speed.x /= physics.friction + 1
       speed.y /= physics.friction + 1
 
+      // stop target if too slow
       if (Math.abs(speed.x) < 0.01) speed.x = 0
       if (Math.abs(speed.y) < 0.01) speed.y = 0
 
+      // BOUNCE
       const rotatedBox = getRotatedBoundingRect(size.width, size.height, angle.a)
-
+      // check LEFT border
       if (pos.x <= 1 + rotatedBox.width / 2) {
-        speed.x *= -physics.bounceForce
         pos.x = 1 + rotatedBox.width / 2
-      } else if (pos.x >= window.innerWidth - 1 - rotatedBox.width / 2) {
-        speed.x *= -physics.bounceForce
+        if (speed.x < 0) speed.x *= -physics.bounceForce
+      }
+      // check RIGHT border
+      if (pos.x >= window.innerWidth - 1 - rotatedBox.width / 2) {
         pos.x = window.innerWidth - 1 - rotatedBox.width / 2
-      } else if (pos.y <= 1 + rotatedBox.height / 2) {
-        speed.y *= -physics.bounceForce
+        if (speed.x > 0) speed.x *= -physics.bounceForce
+      }
+      // check TOP border
+      if (pos.y <= 1 + rotatedBox.height / 2) {
         pos.y = 1 + rotatedBox.height / 2
-      } else if (pos.y >= window.innerHeight - 1 - rotatedBox.height / 2) {
-        speed.y *= -physics.bounceForce
+        if (speed.y < 0) speed.y *= -physics.bounceForce
+      }
+      // check BOTTOM border
+      if (pos.y >= window.innerHeight - 1 - rotatedBox.height / 2) {
         pos.y = window.innerHeight - 1 - rotatedBox.height / 2
+        if (speed.y > 0) speed.y *= -physics.bounceForce
       }
 
+      // clamp speed if too fast
       speed.x = Math.max(-physics.maxSpeed, Math.min(physics.maxSpeed, speed.x))
       speed.y = Math.max(-physics.maxSpeed, Math.min(physics.maxSpeed, speed.y))
 
+      // SPEED
       pos.x += speed.x
       pos.y += speed.y
 
