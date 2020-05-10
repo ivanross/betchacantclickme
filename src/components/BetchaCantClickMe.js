@@ -1,5 +1,6 @@
 import React, { useRef, useImperativeHandle, forwardRef, useEffect } from 'react'
 import { NONONO } from '../lib/contants'
+import { useConst } from '../hooks/useConst'
 
 const PI = Math.PI
 const TAU = Math.PI * 2
@@ -55,10 +56,10 @@ export const BetchaCantClickMe = forwardRef(
     forwardedRef
   ) => {
     const ref = useRef(null)
-    const size = useRef({ width: 0, height: 0 }).current
-    const pos = useRef({ x: 0, y: 0 }).current
-    const speed = useRef({ x: 0, y: 0 }).current
-    const angle = useRef({ a: 0 }).current
+    const size = useConst({ width: 0, height: 0 })
+    const pos = useConst({ x: 0, y: 0 })
+    const speed = useConst({ x: 0, y: 0 })
+    const angle = useConst({ a: 0 })
     const physicsRef = useRef({ ...DEFAULT_PHYSICS, ..._physics })
 
     useEffect(() => {
@@ -72,7 +73,7 @@ export const BetchaCantClickMe = forwardRef(
       if (!btn) return
 
       // Duplicate node and insert after target element
-      // to keep layout
+      // to keep the layout unchanged
       const btnCopy = btn.cloneNode(true)
       btnCopy.style.opacity = 0
       btnCopy.style.pointerEvents = 'none'
@@ -138,12 +139,12 @@ export const BetchaCantClickMe = forwardRef(
         }
         speed.x += repulsionVec.x
         speed.y += repulsionVec.y
-      }
 
-      // ROTATE
-      if (speed.x !== 0 && speed.y !== 0) {
-        const newAngle = Math.atan2(speed.x, -speed.y)
-        angle.a += normalizeDeltaAngle(newAngle - angle.a) * 0.05
+        // ROTATE
+        if (repulsionVec.x !== 0 && repulsionVec.y !== 0) {
+          const newAngle = Math.atan2(repulsionVec.x, -repulsionVec.y)
+          angle.a += normalizeDeltaAngle(newAngle - angle.a) * 0.075
+        }
       }
 
       // FRICITON
