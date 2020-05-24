@@ -1,7 +1,7 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { BetchaCantClickMe } from './BetchaCantClickMe'
 import { useIncrement } from '../hooks/useIncrement'
-import { setBgColor, setText, fadeOut, filterBlur } from '../lib/transition'
+import { setBgColor, setText, filterBlur, fadeOutAndHide } from '../lib/transition'
 
 export function Lvl1({
   chronometer,
@@ -14,6 +14,8 @@ export function Lvl1({
   const betchaRef = useRef(null)
   const [clickCount, incrementClickCount] = useIncrement(0)
 
+  useEffect(() => setBgColor(document.body, '#1cb5e0'), [])
+
   function handleBtnClick() {
     const betcha = betchaRef.current
     if (!betcha) return
@@ -24,8 +26,8 @@ export function Lvl1({
       // Style update
       setBgColor(document.body, 'red')
       setText(betcha.node(), 'Catch me!')
-      fadeOut(document.querySelector('#title'))
-      fadeOut(document.querySelector('#nickname'))
+
+      document.querySelectorAll('#title, #nickname').forEach(fadeOutAndHide)
     } else if (clickCount === 1) {
       betcha.stop()
       chronometer.stop()

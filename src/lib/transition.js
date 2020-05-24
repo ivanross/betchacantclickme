@@ -37,3 +37,23 @@ export function setText(target, text) {
   if (!target) return
   target.textContent = text
 }
+
+export function set(target, prop, value, time) {
+  if (!target) return
+  target.style.transition = `${prop} ${time}ms ease`
+  requestAnimationFrame(() => {
+    target.style[prop] = value
+  })
+}
+
+export function hide(target) {
+  if (!target) return
+  target.style.display = 'none'
+}
+
+export function fadeOutAndHide(target) {
+  if (!target) return
+  fadeOut(target)
+  target.style.pointerEvents = 'none'
+  setTimeout(() => hide(target), 500)
+}

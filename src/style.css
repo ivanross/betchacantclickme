@@ -34,14 +34,14 @@ a:hover {
   font-family: 'Kalam', cursive;
 }
 
+.permanent-marker {
+  font-family: 'Permanent Marker', cursive;
+}
+
 .shadow-6 {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
     0 4px 4px rgba(0, 0, 0, 0.11), 0 8px 8px rgba(0, 0, 0, 0.11), 0 16px 16px rgba(0, 0, 0, 0.11),
     0 32px 32px rgba(0, 0, 0, 0.11);
-}
-
-.new-font {
-  font-family: 'Permanent Marker', cursive;
 }
 
 .nonono {
@@ -61,5 +61,38 @@ a:hover {
   }
   to {
     transform: translate(100px, 0) rotate(10deg);
+  }
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    position: sticky;
+    top: 0;
+    text-align: left;
+    background: #1cb5e0;
+  }
+
+  tr {
+    height: 50px;
+  }
+
+  tbody tr:not(:last-child) td {
+    border-bottom: 1px solid black;
+  }
+
+  td:first-of-type {
+    text-align: center;
+  }
+
+  .current {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .missing-nickname {
+    color: #333;
+    font-style: italic;
   }
 }

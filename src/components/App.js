@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Lvl1 } from './Lvl1'
 import { Lvl2 } from './Lvl2'
+import { Lvl3 } from './Lvl3'
 import { Summary } from './Summary'
 import { Nonono } from './Nonono'
 import { useMousePositionRef } from '../hooks/useMousePositionRef'
@@ -9,7 +10,7 @@ import { useIncrement } from '../hooks/useIncrement'
 import { useDevTool } from '../hooks/useDevTool'
 import { IS_DEBUG } from '../lib/contants'
 
-const levels = [Lvl1, Lvl2, Summary]
+const levels = [Lvl1, Lvl2, Lvl3, Summary]
 
 export function App() {
   const [mouseListenerRef, mousePosRef] = useMousePositionRef()
@@ -30,6 +31,7 @@ export function App() {
           mousePosRef={mousePosRef}
           onLevelCompleted={nextLvl}
           wrapperRef={mouseListenerRef}
+          lvl={lvl}
         />
       </div>
       {!IS_DEBUG && isDevToolOpen && <Nonono />}

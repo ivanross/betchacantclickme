@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import { BetchaCantClickMe } from './BetchaCantClickMe'
 import { Footer } from './Footer'
-import { setBgColor, setText, fadeOut, filterBlur, fadeIn } from '../lib/transition'
+import { setBgColor, setText, fadeOut, filterBlur, fadeIn, fadeOutAndHide } from '../lib/transition'
 import { useIncrement } from '../hooks/useIncrement'
 
 export function Lvl2({
@@ -27,7 +27,7 @@ export function Lvl2({
 
       // Style update
       setBgColor(document.body, '#ee5396')
-      document.querySelectorAll('.fade-out, #footer').forEach(fadeOut)
+      document.querySelectorAll('.fade-out, #footer').forEach(fadeOutAndHide)
       fadeIn(document.querySelector('.message'))
 
       setText(betcha.node(), '😈')
@@ -53,7 +53,9 @@ export function Lvl2({
         <div className="f1 ma2 fade-out">🎉 WOW 🎉</div>
 
         <div className="f3 fade-out">You made it in {chronometer.time / 1000} seconds</div>
-        <div className="f5 mt4 fade-out">Add your nickname, save your time, share with others</div>
+        <div className="f5 mt4 fade-out">
+          Confirm your nickname, save your time, share with others
+        </div>
 
         <div className="mv2">
           <input
@@ -88,7 +90,7 @@ export function Lvl2({
 }
 
 const Message = () => (
-  <div className="message layer o-0 pointer-events-none flex flex-column justify-center items-center black pa3 new-font">
+  <div className="message layer o-0 pointer-events-none flex flex-column justify-center items-center black pa3 permanent-marker">
     <div className="f3 text-center">Did you really think it was that easy?</div>
     <div className="f1 text-center">Betcha can&apos;t click me NOW!</div>
   </div>

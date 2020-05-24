@@ -7,6 +7,7 @@ import 'tachyons-extra'
 import './reset.css'
 import './style.css'
 import 'devtools-detect'
+import './lib/firebase'
 
 function renderApp() {
   ReactDOM.render(<App />, document.getElementById('root'))
